@@ -246,33 +246,33 @@ class iDesk(object):
                     self.sensor.optical = True
                 else:
                     self.sensor.optical = False
-        #
-        #         # Q0.0 红灯
-        #         # Q0.1 绿灯
-        #         # Q0.2 黄灯
-        #         # Q0.3 蜂鸣器
-        #         # Q0.4 风扇
-        #         io_output = self.client.read_area(s7type.S7AreaPA, 0, 0, 2)
-        #         if io_output[1] & 0x01:
-        #             self.lampStatus.red = True
-        #         else:
-        #             self.lampStatus.red = False
-        #         if io_output[1] & 0x02:
-        #             self.lampStatus.green = True
-        #         else:
-        #             self.lampStatus.green = False
-        #         if io_output[0] & 0x04:
-        #             self.lampStatus.yellow = True
-        #         else:
-        #             self.lampStatus.yellow = False
-        #         if io_output[0] & 0x08:
-        #             self.lampStatus.beep = True
-        #         else:
-        #             self.lampStatus.beep = False
-        #         if io_output[0] & 0x10:
-        #             self.fanStatus = True
-        #         else:
-        #             self.fanStatus = False
+                # Q0.0 红灯
+                # Q0.1 绿灯
+                # Q0.2 黄灯
+                # Q0.3 蜂鸣器
+                # Q0.4 风扇
+                io_output = self.client.read_area(s7type.S7AreaPA, 0, 0, 2)
+                logging.debug("PA input " + str(io_output))
+                if io_output[0] & 0x01:
+                    self.lampStatus.red = True
+                else:
+                    self.lampStatus.red = False
+                if io_output[0] & 0x02:
+                    self.lampStatus.green = True
+                else:
+                    self.lampStatus.green = False
+                if io_output[0] & 0x04:
+                    self.lampStatus.yellow = True
+                else:
+                    self.lampStatus.yellow = False
+                if io_output[0] & 0x08:
+                    self.lampStatus.beep = True
+                else:
+                    self.lampStatus.beep = False
+                if io_output[0] & 0x10:
+                    self.fanStatus = True
+                else:
+                    self.fanStatus = False
         #         # MD16 温度
         #         # MD24 湿度
         #         memory_sensor = self.client.read_area(s7type.S7AreaMK, 0, 16, 16)
