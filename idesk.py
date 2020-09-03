@@ -298,78 +298,79 @@ class iDesk(object):
                 # 读编号
                 # MB80
                 self.lesson = self.client.read_area(s7type.S7AreaMK, 0, 80, 1)[0]
-                logging.debug("lesson" + str(self.lesson))
+                logging.debug("lesson " + str(self.lesson))
                 # 读完成标志
                 # M90.0
                 m90data = self.client.read_area(s7type.S7AreaMK, 0, 90, 1)[0]
+                logging.debug("M90 " + str(m90data))
                 if m90data & 0x01:
                     self.isFinished = True
                 else:
                     self.isFinished = False
-        #
-        #         # meter_data = self.client.read_area(s7type.S7AreaDB, 9, 0, 48)
-        #         # self.powerMeter.phaseA_voltage = struct.unpack_from('>f', meter_data, 0)[0]
-        #         # self.powerMeter.phaseA_current = struct.unpack_from('>f', meter_data, 4)[0]
-        #         # self.powerMeter.Power_active = struct.unpack_from('>f', meter_data, 8)[0] * 1000
-        #         # self.powerMeter.Power_reactive = struct.unpack_from('>f', meter_data, 12)[0] * 1000
-        #         # self.powerMeter.Power_total = struct.unpack_from('>f', meter_data, 16)[0] * 1000
-        #         # self.powerMeter.Power_factor = struct.unpack_from('>f', meter_data, 20)[0]
-        #
-        #         # send to redis
-        #         # cache.cache_save("中工创智:%s:按键:green" % self.id, self.buttonStatus.green, None)
-        #         # cache.cache_save("中工创智:%s:按键:red" % self.id, self.buttonStatus.red, None)
-        #         # cache.cache_save("中工创智:%s:灯:green" % self.id, self.lampStatus.green, None)
-        #         # cache.cache_save("中工创智:%s:灯:red" % self.id, self.lampStatus.red, None)
-        #         # cache.cache_save("中工创智:%s:灯:yellow" % self.id, self.lampStatus.yellow, None)
-        #         # cache.cache_save("中工创智:%s:灯:beep" % self.id, self.lampStatus.beep, None)
-        #         # cache.cache_save("中工创智:%s:风扇" % self.id, self.fanStatus, None)
-        #         # cache.cache_save("中工创智:%s:传感器:光纤" % self.id, self.sensor.optical, None)
-        #         # cache.cache_save("中工创智:%s:传感器:温度" % self.id, self.sensor.temperature, None)
-        #         # cache.cache_save("中工创智:%s:传感器:湿度" % self.id, self.sensor.humidity, None)
-        #         #
-        #         # cache.cache_save("中工创智:%s:计量:电压" % self.id, self.powerMeter.phaseA_voltage, None)
-        #         # cache.cache_save("中工创智:%s:计量:电流" % self.id, self.powerMeter.phaseA_current, None)
-        #         # cache.cache_save("中工创智:%s:计量:有功功率" % self.id, self.powerMeter.Power_active, None)
-        #         # cache.cache_save("中工创智:%s:计量:无功功率" % self.id, self.powerMeter.Power_reactive, None)
-        #         # cache.cache_save("中工创智:%s:计量:视在功率" % self.id, self.powerMeter.Power_total, None)
-        #         # cache.cache_save("中工创智:%s:计量:功率因数" % self.id, self.powerMeter.Power_factor, None)
-        #
-        #         dev_msg = {
-        #             "version":"1",
-        #             "edgeTime":int(time.time()),
-        #             "sensor":{
-        #                 "temperature":self.sensor.temperature,
-        #                 "humidity":self.sensor.humidity,
-        #                 "optical":self.sensor.optical
-        #             },
-        #             "lamp":{
-        #                 "red":self.lampStatus.red,
-        #                 "green": self.lampStatus.green,
-        #                 "yellow": self.lampStatus.yellow,
-        #                 "beep": self.lampStatus.beep
-        #             },
-        #             "button":{
-        #                 "green":self.buttonStatus.green,
-        #                 "red":self.buttonStatus.red
-        #             },
-        #             "fan":self.fanStatus,
-        #             "meters":{
-        #                 "voltage":self.powerMeter.phaseA_voltage,
-        #                 "current":self.powerMeter.phaseA_current,
-        #                 "power":{
-        #                     "total":self.powerMeter.Power_total,
-        #                     "active":self.powerMeter.Power_active,
-        #                     "reactive":self.powerMeter.Power_reactive,
-        #                 },
-        #                 "factor": self.powerMeter.Power_factor
-        #             },
-        #             "result":self.isFinished,
-        #             "step":0,
-        #             "index":self.lesson
-        #         }
-        #         # send to mqtt server
-        #         self.interface.send_msg(json.dumps(dev_msg))
-        #
+
+                # meter_data = self.client.read_area(s7type.S7AreaDB, 9, 0, 48)
+                # self.powerMeter.phaseA_voltage = struct.unpack_from('>f', meter_data, 0)[0]
+                # self.powerMeter.phaseA_current = struct.unpack_from('>f', meter_data, 4)[0]
+                # self.powerMeter.Power_active = struct.unpack_from('>f', meter_data, 8)[0] * 1000
+                # self.powerMeter.Power_reactive = struct.unpack_from('>f', meter_data, 12)[0] * 1000
+                # self.powerMeter.Power_total = struct.unpack_from('>f', meter_data, 16)[0] * 1000
+                # self.powerMeter.Power_factor = struct.unpack_from('>f', meter_data, 20)[0]
+
+                # send to redis
+                # cache.cache_save("中工创智:%s:按键:green" % self.id, self.buttonStatus.green, None)
+                # cache.cache_save("中工创智:%s:按键:red" % self.id, self.buttonStatus.red, None)
+                # cache.cache_save("中工创智:%s:灯:green" % self.id, self.lampStatus.green, None)
+                # cache.cache_save("中工创智:%s:灯:red" % self.id, self.lampStatus.red, None)
+                # cache.cache_save("中工创智:%s:灯:yellow" % self.id, self.lampStatus.yellow, None)
+                # cache.cache_save("中工创智:%s:灯:beep" % self.id, self.lampStatus.beep, None)
+                # cache.cache_save("中工创智:%s:风扇" % self.id, self.fanStatus, None)
+                # cache.cache_save("中工创智:%s:传感器:光纤" % self.id, self.sensor.optical, None)
+                # cache.cache_save("中工创智:%s:传感器:温度" % self.id, self.sensor.temperature, None)
+                # cache.cache_save("中工创智:%s:传感器:湿度" % self.id, self.sensor.humidity, None)
+                #
+                # cache.cache_save("中工创智:%s:计量:电压" % self.id, self.powerMeter.phaseA_voltage, None)
+                # cache.cache_save("中工创智:%s:计量:电流" % self.id, self.powerMeter.phaseA_current, None)
+                # cache.cache_save("中工创智:%s:计量:有功功率" % self.id, self.powerMeter.Power_active, None)
+                # cache.cache_save("中工创智:%s:计量:无功功率" % self.id, self.powerMeter.Power_reactive, None)
+                # cache.cache_save("中工创智:%s:计量:视在功率" % self.id, self.powerMeter.Power_total, None)
+                # cache.cache_save("中工创智:%s:计量:功率因数" % self.id, self.powerMeter.Power_factor, None)
+
+                dev_msg = {
+                    "version":"1",
+                    "edgeTime":int(time.time()),
+                    "sensor":{
+                        "temperature":self.sensor.temperature,
+                        "humidity":self.sensor.humidity,
+                        "optical":self.sensor.optical
+                    },
+                    "lamp":{
+                        "red":self.lampStatus.red,
+                        "green": self.lampStatus.green,
+                        "yellow": self.lampStatus.yellow,
+                        "beep": self.lampStatus.beep
+                    },
+                    "button":{
+                        "green":self.buttonStatus.green,
+                        "red":self.buttonStatus.red
+                    },
+                    "fan":self.fanStatus,
+                    "meters":{
+                        "voltage":self.powerMeter.phaseA_voltage,
+                        "current":self.powerMeter.phaseA_current,
+                        "power":{
+                            "total":self.powerMeter.Power_total,
+                            "active":self.powerMeter.Power_active,
+                            "reactive":self.powerMeter.Power_reactive,
+                        },
+                        "factor": self.powerMeter.Power_factor
+                    },
+                    "result":self.isFinished,
+                    "step":0,
+                    "index":self.lesson
+                }
+                logging.debug("Data: "+ str(dev_msg))
+                # send to mqtt server
+                self.interface.send_msg(json.dumps(dev_msg))
             except Exception as e:
                 try:
                     self.client.disconnect()
