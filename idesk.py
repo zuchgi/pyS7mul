@@ -273,13 +273,16 @@ class iDesk(object):
                     self.fanStatus = True
                 else:
                     self.fanStatus = False
-        #         # MD16 温度
-        #         # MD24 湿度
-        #         memory_sensor = self.client.read_area(s7type.S7AreaMK, 0, 16, 16)
-        #         # buffer转float
-        #         # !!!特别关键
-        #         self.sensor.temperature = struct.unpack_from('>f', memory_sensor, 0)[0]
-        #         self.sensor.humidity = struct.unpack_from('>f', memory_sensor, 4)[0]
+                # MD16 温度
+                # MD24 湿度
+                memory_sensor = self.client.read_area(s7type.S7AreaMK, 0, 16, 16)
+                logging.debug("MD16  " + str(memory_sensor))
+                # buffer转float
+                # !!!特别关键
+                self.sensor.temperature = struct.unpack_from('>f', memory_sensor, 0)[0]
+                logging.debug("temperature " + str(self.sensor.temperature))
+                self.sensor.humidity = struct.unpack_from('>f', memory_sensor, 4)[0]
+                logging.debug("humidity " + str(self.sensor.humidity))
         #         # 读电表数据
         #         # MD38 电压
         #         # MD42 电流
