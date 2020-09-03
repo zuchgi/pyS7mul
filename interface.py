@@ -20,6 +20,7 @@ class interface(object):
         self.clientTx.connect(server_info['host'],
                               server_info['port'])
         self.clientTx.loop_start()
+        # self.send_msg()
 
     def on_connect(self, userdata, flags, rc):
         if rc == 0:

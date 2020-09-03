@@ -5,7 +5,9 @@ import snap7.snap7types as s7type
 import logging
 from threading import Timer
 import struct
+import json
 import interface
+import time
 
 
 # S7AreaPE = 0x81
@@ -66,12 +68,13 @@ class iDesk(object):
 
         self.isFinished = False
         self.lesson = 0
-
-        interface.interface('IR829/' + str(self.index) + '/TX', self.name)
+        # mqtt interface
+        self.interface = interface.interface('IR829/' + str(self.index) + '/TX', self.name)
 
     # 周期性检查设备连接情况，如果异常则重连
     def reconnect(self):
         if not self.client.get_connected():
+            logging.error('Client :%s disconnected! (%s)' % (self.index, self.ip))
             try:
                 self.client.disconnect()
                 self.client.connect(self.ip, rack=self.rack, slot=self.slot)
@@ -184,7 +187,41 @@ class iDesk(object):
                 # cache.cache_save("中工创智:%s:计量:视在功率" % self.id, self.powerMeter.Power_total, None)
                 # cache.cache_save("中工创智:%s:计量:功率因数" % self.id, self.powerMeter.Power_factor, None)
 
+                dev_msg = {
+                    "version":"1",
+                    "edgeTime":int(time.time()),
+                    "sensor":{
+                        "temperature":self.sensor.temperature,
+                        "humidity":self.sensor.humidity,
+                        "optical":self.sensor.optical
+                    },
+                    "lamp":{
+                        "red":self.lampStatus.red,
+                        "green": self.lampStatus.green,
+                        "yellow": self.lampStatus.yellow,
+                        "beep": self.lampStatus.beep
+                    },
+                    "button":{
+                        "green":self.buttonStatus.green,
+                        "red":self.buttonStatus.red
+                    },
+                    "fan":self.fanStatus,
+                    "meters":{
+                        "voltage":self.powerMeter.phaseA_voltage,
+                        "current":self.powerMeter.phaseA_current,
+                        "power":{
+                            "total":self.powerMeter.Power_total,
+                            "active":self.powerMeter.Power_active,
+                            "reactive":self.powerMeter.Power_reactive,
+                        },
+                        "factor": self.powerMeter.Power_factor
+                    },
+                    "result":self.isFinished,
+                    "step":0,
+                    "index":self.lesson
+                }
                 # send to mqtt server
+                self.interface.send_msg(json.dumps(dev_msg))
 
             except Exception as e:
                 try:
@@ -192,8 +229,6 @@ class iDesk(object):
                 except Exception as e:
                     logging.error(str(e))
                 logging.error(str(e))
-        else:
-            logging.error('Client :%s disconnected! (%s)' % (self.id, self.ip))
         t = Timer(self.collect_period, self.collect)
         t.start()
 
