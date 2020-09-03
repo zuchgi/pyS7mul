@@ -4,7 +4,7 @@ import logging
 import devinfo
 import idesk
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 device = []
 
 
