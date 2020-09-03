@@ -294,17 +294,18 @@ class iDesk(object):
                 logging.debug("phaseA_voltage " + str(self.powerMeter.phaseA_voltage))
                 self.powerMeter.phaseA_current = struct.unpack_from('>f', meter_data, 4)[0]
                 logging.debug("phaseA_current " + str(self.powerMeter.phaseA_current))
-        #
-        #         # 读编号
-        #         # MB80
-        #         self.lesson = self.client.read_area(s7type.S7AreaMK, 0, 80, 1)
-        #         # 读完成标志
-        #         # M90.0
-        #         m90data = self.client.read_area(s7type.S7AreaMK, 0, 90, 1)
-        #         if m90data & 0x01:
-        #             self.isFinished = True
-        #         else:
-        #             self.isFinished = False
+
+                # 读编号
+                # MB80
+                self.lesson = self.client.read_area(s7type.S7AreaMK, 0, 80, 1)[0]
+                logging.debug("lesson" + str(self.lesson))
+                # 读完成标志
+                # M90.0
+                m90data = self.client.read_area(s7type.S7AreaMK, 0, 90, 1)[0]
+                if m90data & 0x01:
+                    self.isFinished = True
+                else:
+                    self.isFinished = False
         #
         #         # meter_data = self.client.read_area(s7type.S7AreaDB, 9, 0, 48)
         #         # self.powerMeter.phaseA_voltage = struct.unpack_from('>f', meter_data, 0)[0]
