@@ -227,24 +227,25 @@ class iDesk(object):
 
     # 周期性读取数据
     def collect(self):
-        # if self.client.get_connected():
-        #     try:
-        #         # I0.0 光纤输入
-        #         # I0.1 红色按钮 常闭
-        #         # I0.2 绿色按钮 常开
-        #         io_input = self.client.read_area(s7type.S7AreaPE, 0, 0, 1)
-        #         if io_input[0] & 0x04 != 0:
-        #             self.buttonStatus.green = True
-        #         else:
-        #             self.buttonStatus.green = False
-        #         if io_input[0] & 0x02 != 0:
-        #             self.buttonStatus.red = True
-        #         else:
-        #             self.buttonStatus.red = False
-        #         if io_input[0] & 0x01 != 0:
-        #             self.sensor.optical = True
-        #         else:
-        #             self.sensor.optical = False
+        if self.client.get_connected():
+            try:
+                # I0.0 光纤输入
+                # I0.1 红色按钮 常闭
+                # I0.2 绿色按钮 常开
+                io_input = self.client.read_area(s7type.S7AreaPE, 0, 0, 1)
+                logging.debug("PE input "+ str(io_input))
+                if io_input[0] & 0x04 != 0:
+                    self.buttonStatus.green = True
+                else:
+                    self.buttonStatus.green = False
+                if io_input[0] & 0x02 != 0:
+                    self.buttonStatus.red = True
+                else:
+                    self.buttonStatus.red = False
+                if io_input[0] & 0x01 != 0:
+                    self.sensor.optical = True
+                else:
+                    self.sensor.optical = False
         #
         #         # Q0.0 红灯
         #         # Q0.1 绿灯
@@ -362,12 +363,12 @@ class iDesk(object):
         #         # send to mqtt server
         #         self.interface.send_msg(json.dumps(dev_msg))
         #
-        #     except Exception as e:
-        #         try:
-        #             self.client.disconnect()
-        #         except Exception as e:
-        #             logging.error(str(e))
-        #         logging.error(str(e))
+            except Exception as e:
+                try:
+                    self.client.disconnect()
+                except Exception as e:
+                    logging.error(str(e))
+                logging.error(str(e))
         t = Timer(self.collect_period, self.collect)
         t.start()
 
