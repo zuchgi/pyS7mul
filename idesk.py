@@ -208,12 +208,12 @@ class iDesk(object):
         self.isFinished = False
         self.lesson = 0
         # mqtt interface
-        self.interface = interface.interface('IR829/' + str(self.index) + '/TX', self.name)
+        self.interface = interface.iMQTT('IR829/' + str(self.index) + '/TX', self.name)
 
     # 周期性检查设备连接情况，如果异常则重连
     def reconnect(self):
         if not self.client.get_connected():
-            logging.error('Client :%s disconnected! (%s)' % (self.index, self.ip))
+            logging.error('Client :%d disconnected! (%s)' % (self.index, self.ip))
             try:
                 self.client.disconnect()
                 self.client.connect(self.ip, rack=self.rack, slot=self.slot)

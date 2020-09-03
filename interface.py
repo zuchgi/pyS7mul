@@ -5,7 +5,7 @@ import devinfo
 import paho.mqtt.client as mqtt
 
 
-class interface(object):
+class iMQTT(object):
     def __init__(self, topic2publish, name):
         self.topic2publish = topic2publish
         self.client_name = name + "_client"
